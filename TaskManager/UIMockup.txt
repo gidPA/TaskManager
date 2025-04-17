@@ -1,0 +1,6 @@
+Welcome to GPA's Task Manager\n
+Select an action:\n
+\t1. Create New Task\n
+\t2. View All Task\n
+\t3. Filter task by status\n
+\t4. Mark Task as complete\n
