@@ -2,6 +2,10 @@ static class TaskManager
 {
     private static List<Task> TaskList = new List<Task>();
 
+    private static int GetNewId(){
+        return TaskList.Any() ? TaskList.Max(task => task.TaskId) + 1 : 1;
+    }
+
     private static string TruncateString(string text, int maxLength)
     {
         if (text.Length <= maxLength) return text;
@@ -17,7 +21,7 @@ static class TaskManager
         int minute
     )
     {
-        TaskList.Add(new Task(description, new DateTime(year, month, day, hour, minute, 0)));
+        TaskList.Add(new Task(description, new DateTime(year, month, day, hour, minute, 0), GetNewId()));
     }
     public static void ViewAllTask()
     {
@@ -26,27 +30,34 @@ static class TaskManager
         Console.WriteLine(new string('-', 99)); // separator line
 
         foreach(Task task in TaskList){
-            Console.WriteLine("{0, -9} | {1,-40} | {2,-30} | {3,-20}", index, TruncateString(task.Description, 40), task.DueDate.ToString("yyyy-MM-dd HH:mm"), task.GetTaskName(task.Status));
+            Console.WriteLine("{0, -9} | {1,-40} | {2,-30} | {3,-20}", task.TaskId, TruncateString(task.Description, 40), task.DueDate.ToString("yyyy-MM-dd HH:mm"), task.GetTaskName(task.Status));
             index += 1;
         }
     }
 
-    public static void ViewTaskByID(int taskID){
-        Console.WriteLine("Task Details");
-        Console.WriteLine("\tDescription: \t{0}", TaskList[taskID].Description);
-        Console.WriteLine("\tDue date: \t{0}", TaskList[0].DueDate.ToString("yyyy-mm-dd hh:mm"));
-        Console.WriteLine("\tStatus: \t\t{0}", TaskList[0].GetTaskName(TaskList[0].Status));
+    public static void ViewTaskByID(int taskId){
+        try{
+            Task? task = TaskList.SingleOrDefault(t => t.TaskId == taskId);
+            Console.WriteLine("Task Details");
+            Console.WriteLine("\tDescription: \t{0}", task.Description);
+            Console.WriteLine("\tDue date: \t{0}", task.DueDate.ToString("yyyy-mm-dd hh:mm"));
+            Console.WriteLine("\tStatus: \t\t{0}", task.GetTaskName(TaskList[0].Status));
+        } catch(InvalidOperationException){
+            Console.WriteLine("No task with ID {0} were found", taskId);
+        }
+
     }
 
-    public static int MarkTaskAsDone(int taskID){
+    public static int MarkTaskAsDone(int taskId){
         try{
-            if (TaskList[taskID].Status == TaskStatus.Done){
+            Task? task = TaskList.SingleOrDefault(t => t.TaskId == taskId);
+            if (task.Status == TaskStatus.Done){
                 return 0;
             } else {
-                TaskList[taskID].Status = TaskStatus.Done;
+                task.Status = TaskStatus.Done;
                 return 1;
             }
-        } catch (IndexOutOfRangeException){
+        } catch (InvalidOperationException){
             return -1;
         }
     }
