@@ -18,11 +18,11 @@ static class TaskManagerUI
             if (string.IsNullOrWhiteSpace(option))
             {
                 Console.WriteLine("Please enter a valid option");
-                break;
+                continue;
             }
-            
+
             //TODO: jadikan enum
-            //TODO: Resolve kasus kalau enter, program langsung keluar
+            //TODO: Resolve kasus kalau enter, program langsung keluar -> Solved
             //TODO: Ada OutOfRangeException saat ID di luar batas
             switch (option)
             {
@@ -45,7 +45,7 @@ static class TaskManagerUI
                     return;
                 default:
                     Console.WriteLine("Please Enter a valid option");
-                    return;
+                    break;
             }
         }
 
@@ -71,7 +71,7 @@ static class TaskManagerUI
         Console.WriteLine("Enter the task details: ");
 
         int[] dateArgs = new int[5];
-        string[] ArgString = new string[6];
+        string?[] ArgString = new string[6];
 
         Console.Write("Task Description: ");
         ArgString[0] = Console.ReadLine();
@@ -88,7 +88,7 @@ static class TaskManagerUI
         Console.Write("Minute: ");
         ArgString[5] = Console.ReadLine();
 
-        foreach (string arg in ArgString)
+        foreach (string? arg in ArgString)
         {
             if (string.IsNullOrWhiteSpace(arg))
             {
@@ -99,25 +99,24 @@ static class TaskManagerUI
 
         for (int i = 1; i < ArgString.Length; i++)
         {
-            try
-            {
-                dateArgs[i - 1] = int.Parse(ArgString[i]);
-            }
-            catch (FormatException)
-            {
-                Console.WriteLine("Cannot create a new task: Not all date and time details were valid numbers");
-                return;
-            }
+            dateArgs[i - 1] = int.Parse(ArgString[i]);
         }
 
-        TaskManager.AddNewTask(
-            ArgString[0],   //Description
-            dateArgs[0],    //Year
-            dateArgs[1],    //Month
-            dateArgs[2],    //Day
-            dateArgs[3],    //Hour
-            dateArgs[4]     //Minute
-        );
+        try{
+            TaskManager.AddNewTask(
+                    ArgString[0],   //Description
+                    dateArgs[0],    //Year
+                    dateArgs[1],    //Month
+                    dateArgs[2],    //Day
+                    dateArgs[3],    //Hour
+                    dateArgs[4]     //Minute
+                );
+        } catch (FormatException)
+        {
+            Console.WriteLine("Cannot create a new task: Not all date and time details were valid numbers");
+            return;
+        }
+
 
         Console.WriteLine("New task succesfully added");
 
@@ -134,23 +133,31 @@ static class TaskManagerUI
     }
 
     static void MarkTaskAsDone()
-    {   
+    {
         TaskManager.ViewAllTask();
         Console.Write("Enter the ID of the task you want to mark as complete: ");
-        try{
+        try
+        {
             int taskID = int.Parse(Console.ReadLine());
             int result = TaskManager.MarkTaskAsDone(taskID);
-            if(result == -1){
+            if (result == -1)
+            {
                 Console.WriteLine("Task with id {0} does not exist.", taskID);
                 return;
-            } else if(result == 0){
+            }
+            else if (result == 0)
+            {
                 Console.WriteLine("Task with id {0} is already marked as 'done'", taskID);
                 return;
-            } else {
+            }
+            else
+            {
                 Console.WriteLine("Succesfully marked task with id {0} as 'done'", taskID);
             }
-            
-        } catch(FormatException){
+
+        }
+        catch (FormatException)
+        {
             Console.WriteLine("Please enter a valid id");
             return;
         }
