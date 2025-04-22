@@ -36,7 +36,7 @@ static class TaskManagerUI
                     ViewAllTask();
                     break;
                 case "4":
-                    FilterTaskByStatus();
+                    SearchTask();
                     break;
                 case "5":
                     MarkTaskAsDone();
@@ -60,7 +60,7 @@ static class TaskManagerUI
             "\t1. Display this action list\n" +
             "\t2. Create New Task\n" +
             "\t3. View All Task\n" +
-            "\t4. Filter task by status\n" +
+            "\t4. Search Tasks\n" +
             "\t5. Mark Task as complete\n" +
             "\t6. Exit GPA's Task Manager"
         );
@@ -70,55 +70,50 @@ static class TaskManagerUI
     {
         Console.WriteLine("Enter the task details: ");
 
-        int[] dateArgs = new int[5];
-        string?[] ArgString = new string[6];
-
         Console.Write("Task Description: ");
-        ArgString[0] = Console.ReadLine();
+        string? description = Console.ReadLine();
 
-        Console.Write("Year: ");
-        ArgString[1] = Console.ReadLine();
-
-        Console.Write("Month (in number): ");
-        ArgString[2] = Console.ReadLine();
-        Console.Write("Day: ");
-        ArgString[3] = Console.ReadLine();
-        Console.Write("Hour: ");
-        ArgString[4] = Console.ReadLine();
-        Console.Write("Minute: ");
-        ArgString[5] = Console.ReadLine();
-
-        foreach (string? arg in ArgString)
-        {
-            if (string.IsNullOrWhiteSpace(arg))
-            {
-                Console.WriteLine("Cannot create a new task: Not all details were valid.");
-                return;
-            }
-        }
-
-        for (int i = 1; i < ArgString.Length; i++)
-        {
-            dateArgs[i - 1] = int.Parse(ArgString[i]!);
-        }
+        Console.Write("Due date and time (dd-MM-yyyy HH:mm): ");
+        string? dateString = Console.ReadLine();
 
         try{
-            TaskManager.AddNewTask(
-                    ArgString[0]!,   //Description
-                    dateArgs[0],    //Year
-                    dateArgs[1],    //Month
-                    dateArgs[2],    //Day
-                    dateArgs[3],    //Hour
-                    dateArgs[4]     //Minute
-                );
-        } catch (FormatException)
-        {
-            Console.WriteLine("Cannot create a new task: Not all date and time details were valid numbers");
+            if (string.IsNullOrWhiteSpace(description)){
+                throw new NullReferenceException("Task cannot be empty");
+            }
+
+            DateTime dueDate = DateTime.ParseExact(dateString!, "dd-MM-yyyy HH:mm", null);
+
+            TaskManager.AddNewTask(description, dueDate);
+        } catch (NullReferenceException){
+            Console.WriteLine("No task description entered");
+            return;
+        } catch (ArgumentNullException){
+            Console.WriteLine("No date entered");
+            return;
+        } 
+        catch (FormatException){
+            Console.WriteLine("Entered date does not match specification");
             return;
         }
+
         Console.WriteLine("New task succesfully added");
     }
 
+    static void SearchTask(){
+        Console.WriteLine("Search task by description or status, sorted by due date");
+        Console.WriteLine("Press C to cancel");
+        Console.Write("Enter keyword: ");
+        string? keyword = Console.ReadLine();
+
+        if (string.IsNullOrEmpty(keyword)){
+            Console.WriteLine("Please enter a valid keyword");
+            return;
+        } else if (keyword.ToLower() == "c"){
+            return;
+        }
+
+        TaskManager.DisplayFilterResult(keyword);
+    }
     static void ViewAllTask()
     {
         TaskManager.ViewAllTask();
