@@ -99,12 +99,12 @@ static class TaskManagerUI
 
         for (int i = 1; i < ArgString.Length; i++)
         {
-            dateArgs[i - 1] = int.Parse(ArgString[i]);
+            dateArgs[i - 1] = int.Parse(ArgString[i]!);
         }
 
         try{
             TaskManager.AddNewTask(
-                    ArgString[0],   //Description
+                    ArgString[0]!,   //Description
                     dateArgs[0],    //Year
                     dateArgs[1],    //Month
                     dateArgs[2],    //Day
@@ -116,10 +116,7 @@ static class TaskManagerUI
             Console.WriteLine("Cannot create a new task: Not all date and time details were valid numbers");
             return;
         }
-
-
         Console.WriteLine("New task succesfully added");
-
     }
 
     static void ViewAllTask()
@@ -138,7 +135,8 @@ static class TaskManagerUI
         Console.Write("Enter the ID of the task you want to mark as complete: ");
         try
         {
-            int taskID = int.Parse(Console.ReadLine());
+            int taskID = int.Parse(Console.ReadLine()!);
+
             int result = TaskManager.MarkTaskAsDone(taskID);
             if (result == -1)
             {

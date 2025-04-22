@@ -30,28 +30,48 @@ static class TaskManager
         Console.WriteLine(new string('-', 99)); // separator line
 
         foreach(Task task in TaskList.OrderBy(t => t.DueDate)){
-            Console.WriteLine("{0, -9} | {1,-40} | {2,-30} | {3,-20}", task.TaskId, task.Description.TruncateString(40), task.DueDate.ToString("yyyy-MM-dd HH:mm"), task.GetTaskName(task.Status));
+            Console.WriteLine
+            (
+                "{0, -9} | {1,-40} | {2,-30} | {3,-20}", 
+                task.TaskId, task.Description.TruncateString(40), 
+                task.DueDate.ToString("yyyy-MM-dd HH:mm"), 
+                TaskStatusNames.GetTaskName(task.Status)
+            );
             index += 1;
         }
     }
 
-    public static void ViewTaskByID(int taskId){
-        try{
+    public static void ViewTaskByID(int taskId)
+    {
+        try
+        {
             Task? task = TaskList.SingleOrDefault(t => t.TaskId == taskId);
+
+            if (task is null)
+            {
+                Console.WriteLine("No task with ID {0} was found", taskId);
+                return;
+            }
+
             Console.WriteLine("Task Details");
             Console.WriteLine("\tDescription: \t{0}", task.Description);
-            Console.WriteLine("\tDue date: \t{0}", task.DueDate.ToString("yyyy-mm-dd hh:mm"));
-            Console.WriteLine("\tStatus: \t\t{0}", task.GetTaskName(TaskList[0].Status));
-        } catch(InvalidOperationException){
-            Console.WriteLine("No task with ID {0} were found", taskId);
+            Console.WriteLine("\tDue date: \t{0}", task.DueDate.ToString("yyyy-MM-dd HH:mm"));
+            Console.WriteLine("\tStatus: \t\t{0}", TaskStatusNames.GetTaskName(task.Status));
         }
-
+        catch (InvalidOperationException)
+        {
+            Console.WriteLine("Multiple tasks with ID {0} were found", taskId);
+        }
     }
 
     public static int MarkTaskAsDone(int taskId){
         try{
             Task? task = TaskList.SingleOrDefault(t => t.TaskId == taskId);
-            if (task.Status == TaskStatus.Done){
+
+            if (task is null){
+                return -1;
+            }
+            else if (task.Status == TaskStatus.Done){
                 return 0;
             } else {
                 task.Status = TaskStatus.Done;
