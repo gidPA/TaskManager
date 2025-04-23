@@ -2,6 +2,27 @@ static class TaskManager
 {
     private static List<Task> TaskList = new List<Task>();
 
+    static TaskManager()
+    {
+        var csvReader = new CSVReader("TaskList.csv", new string[]{"TaskId", "Description", "DueDate","Status"});
+        var initialTaskData = csvReader.ReadCSVFile();
+        
+        foreach(var task in initialTaskData){
+            TaskList.Add
+            (
+                new Task
+                (
+                    task["Description"],                                                    // Description
+                    DateTime.ParseExact(task["DueDate"], "dd-MM-yyyy HH:mm", null),         // Due Date
+                    int.Parse(task["TaskId"]),                                              // Task ID
+                    task["Status"] == "Done" ? TaskStatus.Done : TaskStatus.InProgress      // Task Status
+                )
+            );
+        }
+
+
+    }
+
     public static string TruncateString(this string text, int maxLength)
     {
         if (text.Length <= maxLength) return text;

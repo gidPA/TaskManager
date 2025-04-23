@@ -17,14 +17,14 @@ public static class TaskStatusNames{
 
 
 class Task{
-    private readonly IDictionary<TaskStatus, string> StatusNames = new Dictionary<TaskStatus, string>(){
-        {TaskStatus.InProgress, "In Progress"},
-        {TaskStatus.Done, "Done"},
-    };
-    public Task(string description, DateTime dueDate, int taskId){
+    // private readonly IDictionary<TaskStatus, string> StatusNames = new Dictionary<TaskStatus, string>(){
+    //     {TaskStatus.InProgress, "In Progress"},
+    //     {TaskStatus.Done, "Done"},
+    // };
+    public Task(string description, DateTime dueDate, int taskId, TaskStatus taskStatus=TaskStatus.InProgress){
         Description = description;
         DueDate = dueDate;
-        Status = TaskStatus.InProgress;
+        Status = taskStatus;
         TaskId = taskId;
     }
     public int TaskId{get;set;}

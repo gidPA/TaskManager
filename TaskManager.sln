@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager", "TaskManager\TaskManager.csproj", "{1E970B89-389A-49CE-9A13-C054A911F99D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSVReader", "CSVReader\CSVReader.csproj", "{CBC34D43-FFB8-4731-A55A-B3D6C01CC4EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{1E970B89-389A-49CE-9A13-C054A911F99D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E970B89-389A-49CE-9A13-C054A911F99D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E970B89-389A-49CE-9A13-C054A911F99D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBC34D43-FFB8-4731-A55A-B3D6C01CC4EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBC34D43-FFB8-4731-A55A-B3D6C01CC4EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBC34D43-FFB8-4731-A55A-B3D6C01CC4EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBC34D43-FFB8-4731-A55A-B3D6C01CC4EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
